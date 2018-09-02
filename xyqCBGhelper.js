@@ -5,14 +5,14 @@
 // @description     人物技能修炼花费计算
 // @match           *://xyq.cbg.163.com/cgi-bin/query.py?*
 // @require         http://cdn.bootcss.com/jquery/1.8.3/jquery.min.js
-// @version         0.0.1
+// @version         0.1
 // @run-at          document-idle 
 // ==/UserScript==
 
 (function() {
     'use strict';
 
-    // Your code here...//context-menu 
+    // Your code here...
 
     var getMenpaiStr = document.getElementsByClassName('searchForm')[0].getElementsByTagName('th')[0].textContent
     if(getMenpaiStr == "门派："){     //根据搜索框中的门派字样判断是否为人物页面
