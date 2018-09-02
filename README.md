@@ -4,9 +4,9 @@ Tampermonkey脚本。在梦幻西游藏宝阁（xyq.cbg.163.com）角色页面�
 
 演示
 
-![添加的计算按钮]](https://github.com/ipez/xyqCBGhelper/blob/master/image/2018-09-02_183107.png)
+![添加的计算按钮](https://github.com/ipez/xyqCBGhelper/blob/master/image/2018-09-02_183107.png)
 
-![新增的价格列表]](https://github.com/ipez/xyqCBGhelper/blob/master/image/2018-09-02_183230.png)
+![新增的价格列表](https://github.com/ipez/xyqCBGhelper/blob/master/image/2018-09-02_183230.png)
 
 
 #计算说明
