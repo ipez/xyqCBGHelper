@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name            梦幻西游藏宝阁助手
-// @namespace       [url=mailto:https://github.com/ipez/xyqCBGhelper]xyqCBGhelper[/url]
+// @namespace       https://github.com/ipez/xyqCBGhelper
 // @author          ipez
 // @description     人物技能修炼花费计算
 // @match           *://xyq.cbg.163.com/cgi-bin/query.py?*
