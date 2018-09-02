@@ -6,7 +6,8 @@
 // @match *://xyq.cbg.163.com/cgi-bin/query.py?*
 // @require http://cdn.bootcss.com/jquery/1.8.3/jquery.min.js
 // @version 0.1
-// @run-at document-idle 
+// @run-at document-idle
+// @license MIT
 // ==/UserScript==
 
 (function() {
