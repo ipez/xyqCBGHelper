@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name 梦幻西游藏宝阁助手
-// @namespace https://github.com/ipez/xyqCBGhelper
-// @author ipez
-// @description 人物技能修炼花费计算
-// @match *://xyq.cbg.163.com/cgi-bin/query.py?*
-// @require http://cdn.bootcss.com/jquery/1.8.3/jquery.min.js
-// @version 0.1
-// @run-at document-idle
-// @license MIT
+// @name            梦幻西游藏宝阁助手
+// @namespace       https://github.com/ipez/xyqCBGhelper
+// @author          ipez
+// @description     人物技能修炼花费计算
+// @match           *://xyq.cbg.163.com/cgi-bin/query.py?*
+// @require         http://cdn.bootcss.com/jquery/1.8.3/jquery.min.js
+// @version         0.1
+// @run-at          document-idle
+// @license         MIT
 // ==/UserScript==
 
 (function() {
