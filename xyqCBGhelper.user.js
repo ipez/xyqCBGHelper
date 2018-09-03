@@ -56,7 +56,8 @@
                 for(var j=4;j>-1;j--){
                     if(price<Math.pow(10,j+2)) newElement.innerHTML = "<span class="+priceClass[j]+">【"+price.toFixed(2)+"】</span>";
                 };
-                oldPrice[0].parentNode.insertBefore(newElement, oldPrice[0].nextSibling); //售价后添加计算值          
+                oldPrice[0].parentNode.insertBefore(newElement, oldPrice[0].nextSibling); //售价后添加计算值 
+                break; //添加价格后立即退出循环    
             };
         };
     };
