@@ -18,13 +18,13 @@
     var getMenpaiStr = document.getElementsByClassName('searchForm')[0].getElementsByTagName('th')[0].textContent;
     if(getMenpaiStr == "门派："){     //根据搜索框中的门派字样判断是否为人物页面
     	$(document).ready(function(){
-        	var btn=$("<input type='button' id='zhushouBtn' class='btn1' value='计算'>");
+        	var btn=$("<input type='button' id='helperBtn' class='btn1' value='计算'>");
         	$("input:button,.btn1").eq(2).after(btn);   
-        	BtnEvent("zhushouBtn");
+        	addBtnEvent("helperBtn");
     	});
     }
 
-    function BtnEvent(id){
+    function addBtnEvent(id){
         var iCalPrice = false; //判定是否已经输出结果
         $("#"+id).bind("click",function(){
             if(iCalPrice === false){
