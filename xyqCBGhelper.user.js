@@ -96,7 +96,7 @@
         var schoolSki = [];
         for(i=1;i<133;i++){
             if(typeof(roleObj.all_skills[i]) == "number"){
-                var sn = schoolSki.push(roleObj.all_skills[i]<=180||180);//技能大于180的为符石加成不考虑，低等级的符石加成暂不处理。
+                var sn = schoolSki.push(Math.min(roleObj.all_skills[i],180));//技能大于180的为符石加成不考虑，低等级的符石加成暂不处理。
                 if(sn == 7)break;  //找到全部7个技能等级跳出循环
             }
         }
