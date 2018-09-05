@@ -78,18 +78,28 @@
         var exptSkiGoldSum = 0;
         for(var i=0;i<5;i++) exptSkiGoldSum += exptSkiGold.sum(exptSki[i])*exptGold[i];
         //修炼上限
-        //var exptSkiGoldMore = 0; 
-        //for(var i=0;i<4;i++){
-        //    switch(iMaxExpt[i]-20){
-        //            case(0) 
-        //
-        //        };
-         //   }
+        var exptSkiMaxGoldSum = 0; 
+        var iMaxExpt = [roleObj.iMaxExpt1,roleObj.iMaxExpt2,roleObj.iMaxExpt3,roleObj.iMaxExpt4];
+        for(i=0;i<4;i++) exptSkiMaxGoldSum += goldLoss(iMaxExpt[i])*exptGold[i]
+
+        function goldLoss(maxExpt){
+            var goldLoss = 0;
+            switch(maxExpt-20){
+                case 0: goldLoss = 0;break;
+                case 1: goldLoss = exptSkiGold[12];break; //损失修炼等级13
+                case 2: goldLoss = exptSkiGold[12]+exptSkiGold[13];break;
+                case 3: goldLoss = exptSkiGold[13]+exptSkiGold[14]+exptSkiGold[15];break;
+                case 4: goldLoss = exptSkiGold[14]+exptSkiGold[15]+exptSkiGold[16]+exptSkiGold[17];break;
+                case 5: goldLoss = exptSkiGold[14]+exptSkiGold[15]+exptSkiGold[16]+exptSkiGold[17]+exptSkiGold[22];break;
+            }
+            return goldLoss;
+        }
          
         //宠物修炼
         var xiuLianGuoMoney = 640000;  //修炼果单价
         var beastSki = [roleObj.iBeastSki1,roleObj.iBeastSki2,roleObj.iBeastSki3,roleObj.iBeastSki4];
-        for(var SumExp=0,i=0;i<4;i++) SumExp += exptSkiGold.sum(beastSki[i]);
+        var SumExp=0;
+        for(i=0;i<4;i++) SumExp += exptSkiGold.sum(beastSki[i]);
         var beastSkiMoney = Math.ceil(SumExp/15)*xiuLianGuoMoney;
         
         //角色师门
@@ -107,7 +117,7 @@
         //返回金钱总消耗
         var gold2money = 0.8; 
         var money2rmb = 285.0/3000e4; //每三千万￥285
-        var rmbPrice = ((exptSkiGoldSum+schoolSkiGoldSum)*gold2money+beastSkiMoney)*money2rmb;
+        var rmbPrice = ((exptSkiGoldSum+schoolSkiGoldSum+exptSkiMaxGoldSum)*gold2money+beastSkiMoney)*money2rmb;
         return rmbPrice;  
 
     }
