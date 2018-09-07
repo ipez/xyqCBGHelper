@@ -5,7 +5,7 @@
 // @description     人物技能修炼花费计算
 // @match           *://xyq.cbg.163.com/cgi-bin/query.py?*
 // @require         http://cdn.bootcss.com/jquery/1.8.3/jquery.min.js
-// @version         0.1
+// @version         0.2
 // @run-at          document-idle
 // @license         MIT
 // ==/UserScript==
