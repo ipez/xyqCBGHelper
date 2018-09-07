@@ -17,31 +17,122 @@
 
     var getMenpaiStr = document.getElementsByClassName('searchForm')[0].getElementsByTagName('th')[0].textContent;
     if(getMenpaiStr == "门派："){     //根据搜索框中的门派字样判断是否为人物页面
-    	$(document).ready(function(){
-        	var btn=$("<input type='button' id='helperBtn' class='btn1' value='计算'>");
-        	$("input:button,.btn1").eq(2).after(btn);   
-        	addBtnEvent("helperBtn");
-    	});
+        $(document).ready(function(){
+        var newElement = "<tr>";
+            newElement += "<td colspan='10' align='right'>&nbsp;转换比(现金/储备金)：";
+            newElement += "<input type='text' class='txt1' size='3' id='txt_gold2money' value='0.8'>";
+            newElement += "&nbsp;&nbsp;金价(RMB/三千万MHB)：";
+            newElement += "<input type='text' class='txt1' size='6' id='txt_money2rmb' value='285.0'>";
+            newElement += "&nbsp;&nbsp;修炼果(万MHB)：";
+            newElement += "<input type='text' class='txt1' size='4' id='txt_xlgmoney' value='64.0'>";
+            newElement += "&nbsp;&nbsp;&nbsp;&nbsp; <input type='button' id='helperBtn' class='btn1' value='计算'></td>";
+            newElement += "</tr>";
+            $("tbody")[0].lastChild.after($(newElement)[0]);
+            addBtnEvent("helperBtn");
+        });
     }
 
+    var objPrev = {'gold2money':null,'money2rmb':null,'xlgmoney':null}; //全局，保存上次计算参数
+
     function addBtnEvent(id){
-        var iCalPrice = false; //判定是否已经输出结果
+        var iCalPrice = false;         //判断是否已经输出结果
         $("#"+id).bind("click",function(){
-            if(iCalPrice === false){
-                newPriceList();
-             iCalPrice = true;
-            } 
+            if(isFinish(objPrev) === true){
+                alert("计算已经完成");               
+            }
             else{
-                alert("计算已经完成");
+                var obj = getInput();
+                newPriceList(obj.gold2money,obj.money2rmb,obj.xlgmoney);
+                objPrev = obj;
+                iCalPrice = true;
             }
         });
     }
 
+    //判断是否完成计算
+    function isFinish(obj){
+        var temp1 = parseFloat($("input:text[id='txt_gold2money']").val());
+        var temp2 = parseFloat($("input:text[id='txt_money2rmb']").val());
+        var temp3 = parseFloat($("input:text[id='txt_xlgmoney']").val());
+        if(temp1==obj.gold2money && temp2==obj.money2rmb && temp3==obj.xlgmoney) return true;
+        else return false;
+    }
+
+    function getInput(){
+        var gold2money = 0.8; 
+        var money2rmb = 285.0; //每三千万￥285
+        var xlgmoney = 64.0;   
+        var reg = /(^\d+(\.\d+)?$)|(^[0-9]*$)/;  //正浮点数和正整数
+        
+        let temp = $("input:text[id='txt_gold2money']").val();
+        if(temp=="") {
+            gold2money = 0.8; //没有输入时的默认值
+        }
+        else {
+            if(reg.test(temp)==true){
+                gold2money = parseFloat(temp);
+                if(gold2money>1){
+                    alert("转换比请取值 0~1 之间");
+                    return false;
+                }
+            }
+            else{
+                alert("请输入数字");
+                return false;
+            }
+        }
+        
+        temp = $("input:text[id='txt_money2rmb']").val(); //每三千万￥285
+        if(temp=="") {
+            money2rmb = 285.0; //没有输入时的默认值
+        }
+        else {
+            if(reg.test(temp)==true){
+                money2rmb = parseFloat(temp);
+                if(money2rmb>1000){
+                    alert("金价过高请取 1000 以内");
+                    return false;
+                }
+            }
+            else{
+                alert("请输入数字");
+                return false;
+            }
+        }
+        
+        temp = $("input:text[id='txt_xlgmoney']").val(); 
+        if(temp=="") {
+            xlgmoney = 64.0; //没有输入时的默认值
+        }
+        else {
+            if(reg.test(temp)==true){
+                xlgmoney = parseFloat(temp);
+                if(xlgmoney>100){
+                    alert("修炼果取值过大>100");
+                    return false;
+                }
+                if(xlgmoney<10){
+                    alert("修炼果取值过小<10");
+                    return false;
+                }
+            }
+            else{
+                alert("请输入数字");
+                return false;
+            }
+        }
+        return {
+            'gold2money': gold2money,
+            'money2rmb': money2rmb,
+            'xlgmoney': xlgmoney
+        }
+    }
+
     // 刷新计算价格列表
-    function newPriceList(){
+    function newPriceList(gold2money,money2rmb,xlgmoney){
         var list = document.getElementById('soldList').getElementsByTagName('tr');
         for (var i=0;i<list.length;i++){
-            var price = calPrice(list[i]);
+            var price = calPrice(list[i],gold2money,money2rmb,xlgmoney);
             addCalPrice(list[i],price);             
         }
     }
@@ -51,13 +142,25 @@
         var priceClass = ['p100','p1000','p10000','p100000','p1000000'];
         for (var i=0;i<priceClass.length;i++){
             var oldPrice=role.getElementsByClassName(priceClass[i]);
-            if(oldPrice.length > 0){
-                var newElement = document.createElement('span');
-                for(var j=4;j>-1;j--){
-                    if(price<Math.pow(10,j+2)) newElement.innerHTML = "<span class="+priceClass[j]+">【"+price.toFixed(2)+"】</span>";
+            if(oldPrice.length > 0 ){  
+                if(oldPrice[0].parentNode.children[1].nodeName != "SPAN"){ //判断是否存在计算价格
+                    let newElement = document.createElement('span');
+                    newElement.innerHTML = "【"+price.toFixed(2)+"】";
+                    for(let j=4;j>-1;j--){
+                        if(price<Math.pow(10,j+2)) newElement.className = priceClass[j];  //可以改变计算价格的显示颜色
+                    }
+                    oldPrice[0].parentNode.insertBefore(newElement, oldPrice[0].nextSibling); //售价后添加计算值 
+                    break; //添加价格后立即退出循环    
                 }
-                oldPrice[0].parentNode.insertBefore(newElement, oldPrice[0].nextSibling); //售价后添加计算值 
-                break; //添加价格后立即退出循环    
+                else {
+                    let newElement = document.createElement('span');
+                    newElement.innerHTML = "【"+price.toFixed(2)+"】";
+                    for(let j=4;j>-1;j--){
+                        if(price<Math.pow(10,j+2)) newElement.className = priceClass[j];
+                    }
+                    oldPrice[0].parentNode.replaceChild(newElement,oldPrice[0].parentNode.children[1]); //售价后添加计算值 
+                    break;
+                }              
             }
         }
     }
@@ -68,7 +171,7 @@
     var exptSkiGold = [15,21,29,39,51,65,81,99,119,141,165,191,219,249,281,315,351,389,429,471,515,561,609,659,711];
 
     // 角色技能修炼消耗计算
-    function calPrice(role){
+    function calPrice(role,gold2money,money2rmb,xlgmoney){
         var roleInfo = role.getElementsByTagName("textarea");//获得角色基本信息
         var roleObj = JSON.parse(roleInfo[0].value); //转换成对象
         
@@ -96,11 +199,10 @@
         }
          
         //宠物修炼
-        var xiuLianGuoMoney = 640000;  //修炼果单价
         var beastSki = [roleObj.iBeastSki1,roleObj.iBeastSki2,roleObj.iBeastSki3,roleObj.iBeastSki4];
         var SumExp=0;
         for(i=0;i<4;i++) SumExp += exptSkiGold.sum(beastSki[i]);
-        var beastSkiMoney = Math.ceil(SumExp/15)*xiuLianGuoMoney;
+        var beastSkiMoney = Math.ceil(SumExp/15)*xlgmoney*10000;
         
         //角色师门
         var schoolSki = [];
@@ -145,22 +247,20 @@
         lifeSki[3]=tem;
 
         var lifeSkiGoldSum = 0;
-        for(i=2;i<lifeSki.lenth-3;i++) lifeSkiGoldSum += comLifeSkiGold.sum(lifeSki[i]>40?lifeSki[i]:0);
+        for(i=2;i<lifeSki.length-3;i++) lifeSkiGoldSum += comLifeSkiGold.sum(lifeSki[i]>40?lifeSki[i]:0);
         lifeSkiGoldSum += qiangShenGold.sum(lifeSki[0]>40?lifeSki[0]:0);
         lifeSkiGoldSum += daZaoGold.sum(lifeSki[1]>40?lifeSki[1]:0);
-        lifeSkiGoldSum += lingShiGold.sum(lifeSki[lifeSki.lenth-3]>40?lifeSki[lifeSki.lenth-3]:0);
-        lifeSkiGoldSum += qiangZhuangGold.sum(lifeSki[lifeSki.lenth-2]);
-        lifeSkiGoldSum += qiangZhuangGold.sum(lifeSki[lifeSki.lenth-1]);        
+        lifeSkiGoldSum += lingShiGold.sum(lifeSki[lifeSki.length-3]>40?lifeSki[lifeSki.length-3]:0);
+        lifeSkiGoldSum += qiangZhuangGold.sum(lifeSki[lifeSki.length-2]);
+        lifeSkiGoldSum += qiangZhuangGold.sum(lifeSki[lifeSki.length-1]);        
 
         var lifeBG = [];
         for(i=0;i<160;i++) lifeBG.push(i+1);
         var lifeSkiBGSum = 0;
-        for(i=0;i<lifeSki.lenth;i++) lifeSkiBGSum += lifeBG.sum(lifeSki[i]>40?lifeSki[i]:0);
+        for(i=0;i<lifeSki.length;i++) lifeSkiBGSum += lifeBG.sum(lifeSki[i]>40?lifeSki[i]:0);
 
         //返回金钱总消耗
-        var gold2money = 0.8; 
-        var money2rmb = 285.0/3000e4; //每三千万￥285
-        var rmbPrice = ((exptSkiGoldSum+schoolSkiGoldSum+exptSkiMaxGoldSum+lifeSkiGoldSum)*gold2money+beastSkiMoney)*money2rmb+lifeSkiBGSum/50.0;
+        var rmbPrice = ((exptSkiGoldSum+schoolSkiGoldSum+exptSkiMaxGoldSum+lifeSkiGoldSum)*gold2money+beastSkiMoney)*money2rmb/3000e4+lifeSkiBGSum/50.0;
         return rmbPrice;  
 
     }

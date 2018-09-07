@@ -2,6 +2,8 @@
 
 Tampermonkey脚本。在梦幻西游藏宝阁（xyq.cbg.163.com）角色页面添加计算按钮，实现对角色技能和修炼等花费计算的简单功能。
 
+2018.09.07 version0.2：添加转换比，金价，修炼果输入框。
+
 演示
 
 ![添加的计算按钮](https://github.com/ipez/xyqCBGhelper/blob/master/image/2018-09-02_183107.png)
